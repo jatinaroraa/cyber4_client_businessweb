@@ -457,11 +457,11 @@ const CyberbLogo = () => (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              What Our Students Say
+             Success stories from our community
             </h2>
-            <p className="text-gray-600">
+            {/* <p className="text-gray-600">
               Real success stories from our community
-            </p>
+            </p> */}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
@@ -942,149 +942,341 @@ const CyberbLogo = () => (
     }
 
     // Interview Preparation Sub-page
-    if (currentServicePage === "interview") {
-      return (
-        <div className="pt-16">
-          <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-transparent"></div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-              <button
-                onClick={() => setCurrentServicePage("main")}
-                className="text-teal-400 hover:text-teal-300 mb-4 flex items-center"
-              >
-                <ArrowRight className="w-4 h-4 mr-2 rotate-180" /> Back to
-                Services
-              </button>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Interview <span className="text-teal-400">Preparation</span>
-              </h1>
-              <p className="text-xl max-w-3xl text-gray-300">
-                Master the art of cybersecurity interviews with expert coaching
-              </p>
-            </div>
-          </section>
+    // if (currentServicePage === "interview") {
+    //   return (
+    //     <div className="pt-16">
+    //       <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
+    //         <div className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-transparent"></div>
+    //         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    //           <button
+    //             onClick={() => setCurrentServicePage("main")}
+    //             className="text-teal-400 hover:text-teal-300 mb-4 flex items-center"
+    //           >
+    //             <ArrowRight className="w-4 h-4 mr-2 rotate-180" /> Back to
+    //             Services
+    //           </button>
+    //           <h1 className="text-4xl md:text-5xl font-bold mb-6">
+    //             Interview <span className="text-teal-400">Preparation</span>
+    //           </h1>
+    //           <p className="text-xl max-w-3xl text-gray-300">
+    //             Master the art of cybersecurity interviews with expert coaching
+    //           </p>
+    //         </div>
+    //       </section>
 
-          <section className="py-16">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="prose prose-lg max-w-none mb-12">
-                <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                  Our interview preparation service equips you with the
-                  confidence and skills needed to excel in cybersecurity
-                  interviews. We cover both technical questions and soft skills,
-                  ensuring you're ready for any interview scenario.
-                </p>
-                <p className="text-gray-700 text-lg leading-relaxed">
-                  From entry-level positions to specialized roles, we provide
-                  targeted coaching that helps you articulate your knowledge
-                  effectively and make a lasting impression on potential
-                  employers.
-                </p>
-              </div>
+    //       <section className="py-16">
+    //         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    //           <div className="prose prose-lg max-w-none mb-12">
+    //             <p className="text-gray-700 text-lg leading-relaxed mb-6">
+    //               Our interview preparation service equips you with the
+    //               confidence and skills needed to excel in cybersecurity
+    //               interviews. We cover both technical questions and soft skills,
+    //               ensuring you're ready for any interview scenario.
+    //             </p>
+    //             <p className="text-gray-700 text-lg leading-relaxed">
+    //               From entry-level positions to specialized roles, we provide
+    //               targeted coaching that helps you articulate your knowledge
+    //               effectively and make a lasting impression on potential
+    //               employers.
+    //             </p>
+    //           </div>
 
-              {/* Preparation Areas */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                  <h3 className="text-xl font-bold mb-4">
-                    Technical Interview Prep
-                  </h3>
-                  <ul className="space-y-2">
-                    {[
-                      "Common cybersecurity concepts",
-                      "Network security fundamentals",
-                      "Risk assessment methodologies",
-                      "Compliance frameworks (ISO 27001, NIST)",
-                      "Incident response procedures",
-                      "Technical scenario questions",
-                    ].map((item, index) => (
-                      <li key={index} className="flex items-center">
-                        <Check className="w-5 h-5 text-teal-500 mr-3" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+    //           {/* Preparation Areas */}
+    //           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+    //             <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+    //               <h3 className="text-xl font-bold mb-4">
+    //                 Technical Interview Prep
+    //               </h3>
+    //               <ul className="space-y-2">
+    //                 {[
+    //                   "Common cybersecurity concepts",
+    //                   "Network security fundamentals",
+    //                   "Risk assessment methodologies",
+    //                   "Compliance frameworks (ISO 27001, NIST)",
+    //                   "Incident response procedures",
+    //                   "Technical scenario questions",
+    //                 ].map((item, index) => (
+    //                   <li key={index} className="flex items-center">
+    //                     <Check className="w-5 h-5 text-teal-500 mr-3" />
+    //                     {item}
+    //                   </li>
+    //                 ))}
+    //               </ul>
+    //             </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-                  <h3 className="text-xl font-bold mb-4">
-                    Soft Skills & HR Prep
-                  </h3>
-                  <ul className="space-y-2">
-                    {[
-                      "Behavioral interview questions",
-                      "STAR method techniques",
-                      "Communication skills enhancement",
-                      "Body language and presentation",
-                      "Salary negotiation tips",
-                      "Questions to ask employers",
-                    ].map((item, index) => (
-                      <li key={index} className="flex items-center">
-                        <Check className="w-5 h-5 text-teal-500 mr-3" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+    //             <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+    //               <h3 className="text-xl font-bold mb-4">
+    //                 Soft Skills & HR Prep
+    //               </h3>
+    //               <ul className="space-y-2">
+    //                 {[
+    //                   "Behavioral interview questions",
+    //                   "STAR method techniques",
+    //                   "Communication skills enhancement",
+    //                   "Body language and presentation",
+    //                   "Salary negotiation tips",
+    //                   "Questions to ask employers",
+    //                 ].map((item, index) => (
+    //                   <li key={index} className="flex items-center">
+    //                     <Check className="w-5 h-5 text-teal-500 mr-3" />
+    //                     {item}
+    //                   </li>
+    //                 ))}
+    //               </ul>
+    //             </div>
+    //           </div>
 
-              {/* Session Structure */}
-              <div className="bg-white rounded-lg shadow-lg p-8 mb-12 border border-gray-200">
-                <h2 className="text-2xl font-bold mb-8 text-center">
-                  Session Structure
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {[
-                    {
-                      title: "Assessment",
-                      description:
-                        "Evaluate your current interview readiness and identify improvement areas",
-                      duration: "30 mins",
-                    },
-                    {
-                      title: "Coaching Session",
-                      description:
-                        "Personalized training on technical concepts and interview  techniques",
-                      duration: "30 mins",
-                    },
-                    {
-                      title: "Practice & Feedback",
-                      description:
-                        "Mock questions with detailed feedback and improvement suggestions",
-                      duration: "30 mins",
-                    },
-                  ].map((session, index) => (
-                    <div key={index} className="text-center">
-                      <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="text-teal-600 font-bold">
-                          {index + 1}
-                        </span>
-                      </div>
-                      <h3 className="font-semibold mb-2">{session.title}</h3>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {session.description}
-                      </p>
-                      <span className="text-teal-600 font-semibold">
-                        {session.duration}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+    //           {/* Session Structure */}
+    //           <div className="bg-white rounded-lg shadow-lg p-8 mb-12 border border-gray-200">
+    //             <h2 className="text-2xl font-bold mb-8 text-center">
+    //               Session Structure
+    //             </h2>
+    //             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    //               {[
+    //                 {
+    //                   title: "Assessment",
+    //                   description:
+    //                     "Evaluate your current interview readiness and identify improvement areas",
+    //                   duration: "30 mins",
+    //                 },
+    //                 {
+    //                   title: "Coaching Session",
+    //                   description:
+    //                     "Personalized training on technical concepts and interview  techniques",
+    //                   duration: "30 mins",
+    //                 },
+    //                 {
+    //                   title: "Practice & Feedback",
+    //                   description:
+    //                     "Mock questions with detailed feedback and improvement suggestions",
+    //                   duration: "30 mins",
+    //                 },
+    //               ].map((session, index) => (
+    //                 <div key={index} className="text-center">
+    //                   <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+    //                     <span className="text-teal-600 font-bold">
+    //                       {index + 1}
+    //                     </span>
+    //                   </div>
+    //                   <h3 className="font-semibold mb-2">{session.title}</h3>
+    //                   <p className="text-sm text-gray-600 mb-2">
+    //                     {session.description}
+    //                   </p>
+    //                   <span className="text-teal-600 font-semibold">
+    //                     {session.duration}
+    //                   </span>
+    //                 </div>
+    //               ))}
+    //             </div>
+    //           </div>
 
-              {/* Book Service Button */}
-              <div className="text-center">
-                <button
-                  onClick={() => handleServiceBooking("Interview Preparation")}
-                  className="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-colors font-semibold"
-                >
-                  Book Interview Preparation Service
-                </button>
-              </div>
-            </div>
-          </section>
+    //           {/* Book Service Button */}
+    //           <div className="text-center">
+    //             <button
+    //               onClick={() => handleServiceBooking("Interview Preparation")}
+    //               className="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-colors font-semibold"
+    //             >
+    //               Book Interview Preparation Service
+    //             </button>
+    //           </div>
+    //         </div>
+    //       </section>
+    //     </div>
+    //   );
+    // }
+if (currentServicePage === "interview") {
+  return (
+    <div className="pt-16">
+      <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <button
+            onClick={() => setCurrentServicePage("main")}
+            className="text-teal-400 hover:text-teal-300 mb-4 flex items-center"
+          >
+            <ArrowRight className="w-4 h-4 mr-2 rotate-180" /> Back to
+            Services
+          </button>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Interview <span className="text-teal-400">Preparation</span>
+          </h1>
+          <p className="text-xl max-w-3xl text-gray-300">
+            Master the art of cybersecurity interviews with expert coaching
+          </p>
         </div>
-      );
-    }
+      </section>
 
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="prose prose-lg max-w-none mb-12">
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              Our interview preparation service equips you with the
+              confidence and skills needed to excel in cybersecurity
+              interviews. We cover both technical questions and soft skills,
+              ensuring you're ready for any interview scenario.
+            </p>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              From entry-level positions to specialized roles, we provide
+              targeted coaching that helps you articulate your knowledge
+              effectively and make a lasting impression on potential
+              employers.
+            </p>
+          </div>
+
+          {/* Preparation Areas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <h3 className="text-xl font-bold mb-4">
+                Technical Interview Prep
+              </h3>
+              <ul className="space-y-2">
+                {[
+                  "Common cybersecurity concepts",
+                  "Network security fundamentals",
+                  "Risk assessment methodologies",
+                  "Compliance frameworks (ISO 27001, NIST)",
+                  "Incident response procedures",
+                  "Technical scenario questions",
+                ].map((item, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="w-5 h-5 text-teal-500 mr-3" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+              <h3 className="text-xl font-bold mb-4">
+                Soft Skills & HR Prep
+              </h3>
+              <ul className="space-y-2">
+                {[
+                  "Behavioral interview questions",
+                  "STAR method techniques",
+                  "Communication skills enhancement",
+                  "Body language and presentation",
+                  "Salary negotiation tips",
+                  "Questions to ask employers",
+                ].map((item, index) => (
+                  <li key={index} className="flex items-center">
+                    <Check className="w-5 h-5 text-teal-500 mr-3" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Session Structure */}
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-12 border border-gray-200">
+            <h2 className="text-2xl font-bold mb-8 text-center">
+              Session Structure
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Assessment",
+                  description:
+                    "Evaluate your current interview readiness and identify improvement areas",
+                  duration: "30 mins",
+                },
+                {
+                  title: "Coaching Session",
+                  description:
+                    "Personalized training on technical concepts and interview techniques",
+                  duration: "30 mins",
+                },
+                {
+                  title: "Practice & Feedback",
+                  description:
+                    "Mock questions with detailed feedback and improvement suggestions",
+                  duration: "30 mins",
+                },
+              ].map((session, index) => (
+                <div key={index} className="text-center">
+                  <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-teal-600 font-bold">
+                      {index + 1}
+                    </span>
+                  </div>
+                  <h3 className="font-semibold mb-2">{session.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {session.description}
+                  </p>
+                  <span className="text-teal-600 font-semibold">
+                    {session.duration}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Express Service */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+              Express Service Available
+            </h2>
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-gradient-to-r from-teal-50 to-teal-100 p-8 rounded-lg border border-teal-200 shadow-lg">
+                <div className="text-center">
+                  <div className="flex items-center justify-center mb-4">
+                    <span className="text-2xl mr-2">⚡</span>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      Express Interview Preparation
+                    </h3>
+                  </div>
+                  <p className="text-gray-700 mb-4 text-lg">
+                    Priority interview preparation with scheduling in 2 working days
+                  </p>
+                  <div className="text-4xl font-bold text-teal-600 mb-6">
+                    ₹2,500
+                  </div>
+                  <ul className="text-left space-y-3 mb-8 max-w-md mx-auto">
+                    <li className="flex items-center">
+                      <Check className="w-5 h-5 text-teal-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Priority scheduling within 2 business days</span>
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="w-5 h-5 text-teal-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Intensive interview coaching session</span>
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="w-5 h-5 text-teal-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">Role-specific preparation materials</span>
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="w-5 h-5 text-teal-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">24-hour support during preparation</span>
+                    </li>
+                  </ul>
+                  <button
+                    onClick={() =>
+                      handleServiceBooking("Express Interview Preparation")
+                    }
+                    className="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-colors font-semibold shadow-md hover:shadow-lg"
+                  >
+                    🚀 Book Express Service
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Regular Service Button */}
+          <div className="text-center">
+            <button
+              onClick={() => handleServiceBooking("Interview Preparation")}
+              className="bg-white text-teal-600 px-8 py-3 rounded-lg border-2 border-teal-600 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700 transition-all duration-200 font-semibold shadow-md hover:shadow-lg"
+            >
+              📅 Book Standard Interview Preparation
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
     // Mock Interview Sub-page
     if (currentServicePage === "mock") {
       return (
