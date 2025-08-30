@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronDown,
   Play,
@@ -19,7 +19,18 @@ import {
   Clock,
   ArrowLeft, Share2, BookmarkPlus, ThumbsUp, MessageCircle, Eye
 } from "lucide-react";
+import { Card, Avatar, Spin, message, Empty, Button } from 'antd';
+import { 
+  UserOutlined, 
+  CalendarOutlined, 
+  ClockCircleOutlined, 
+  EyeOutlined,
+  TagsOutlined,
+  ArrowRightOutlined,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
+import { getBlogsApi } from "./services/blog";
 
 const CoursePlatform = () => {
   const [currentPage, setCurrentPage] = useState("home");
@@ -1557,435 +1568,256 @@ if (currentServicePage === "interview") {
     // Fallback
     return null;
   };
-const BlogCard = ({ blog }) => {
+
+
+
+const BlogCard = ({ blog, onBlogClick }) => {
+  // Map API response fields to component props
   const {
-    id,
+    _id,
     title,
-    excerpt,
-    author,
-    publishDate,
-    readTime,
-    category,
-    imageUrl,
-    tags = []
+    description, // Using description as excerpt
+    author = 'Admin',
+    createdAt,
+    thumbnail,
+    tags = [],
+    status,
+    content
   } = blog;
 
-  return (
-    <div onClick={()=>setSelectedBlog(blog)} className="bg-white rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
-      {/* Blog Image */}
-      <div className="relative overflow-hidden">
-        <img
-          src={imageUrl || '/api/placeholder/400/240'}
-          alt={title}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        <div className="absolute top-4 left-4">
-          <span className="bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            {category}
-          </span>
-        </div>
-      </div>
+  // Calculate read time based on content length (rough estimation)
+  const calculateReadTime = (content) => {
+    if (!content) return 1;
+    const wordsPerMinute = 200;
+    const textContent = content.replace(/<[^>]*>/g, ''); // Remove HTML tags
+    const wordCount = textContent.split(/\s+/).length;
+    return Math.ceil(wordCount / wordsPerMinute) || 1;
+  };
 
-      {/* Blog Content */}
-      <div className="p-6 flex flex-col flex-grow">
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Recently';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+  };
+
+  const readTime = calculateReadTime(content);
+  const publishDate = formatDate(createdAt);
+
+  return (
+    <Card
+      hoverable
+      className="h-full flex flex-col overflow-hidden group transition-all duration-300"
+      onClick={() => onBlogClick && onBlogClick(blog)}
+      cover={
+        <div className="relative overflow-hidden h-48">
+          <img
+            src={thumbnail || 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=240&fit=crop'}
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              e.target.src = 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=240&fit=crop';
+            }}
+          />
+          <div className="absolute top-4 left-4">
+            <Tag color={status === 'published' ? 'green' : 'orange'} className="font-semibold">
+              {status === 'published' ? 'Published' : 'Draft'}
+            </Tag>
+          </div>
+        </div>
+      }
+    >
+      <div className="flex flex-col h-full">
         {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-teal-600 transition-colors">
+        <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {title}
         </h3>
 
-        {/* Excerpt */}
+        {/* Description/Excerpt */}
         <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-grow">
-          {excerpt}
+          {description}
         </p>
 
         {/* Tags */}
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {tags.slice(0, 3).map((tag, index) => (
-              <span
+              <Tag
                 key={index}
-                className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md"
+                icon={<TagsOutlined />}
+                color="blue"
+                className="text-xs"
               >
-                <Tag className="w-3 h-3 mr-1 flex-shrink-0" />
                 {tag}
-              </span>
+              </Tag>
             ))}
             {tags.length > 3 && (
-              <span className="text-xs text-gray-500">+{tags.length - 3} more</span>
+              <Tag className="text-xs" color="default">
+                +{tags.length - 3} more
+              </Tag>
             )}
           </div>
         )}
 
         {/* Meta Information */}
         <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <div className="flex items-center">
-              <User className="w-4 h-4 mr-1 flex-shrink-0" />
+              <UserOutlined className="mr-1" />
               <span>{author}</span>
             </div>
             <div className="flex items-center">
-              <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
+              <CalendarOutlined className="mr-1" />
               <span>{publishDate}</span>
             </div>
           </div>
           <div className="flex items-center">
-            <Clock className="w-4 h-4 mr-1 flex-shrink-0" />
+            <ClockCircleOutlined className="mr-1" />
             <span>{readTime} min read</span>
           </div>
         </div>
 
-        {/* Read More Button - Always at bottom */}
-        <button className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold transition-colors group mt-auto">
+        {/* Read More Button */}
+        <Button 
+          type="link" 
+          className="p-0 h-auto font-semibold flex items-center justify-start hover:text-blue-600 transition-colors mt-auto"
+          icon={<EyeOutlined />}
+        >
           Read More
-          <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </button>
+          <ArrowRightOutlined className="ml-2 transition-transform group-hover:translate-x-1" />
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 };
-const BlogViewPage = ({ blog, onBack }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [likes, setLikes] = useState(234);
-  const [isLiked, setIsLiked] = useState(false);
 
-  // Sample full blog content - replace with actual content
-  const blogContent = `
-    <p>Cybersecurity has become one of the most critical fields in today's digital landscape. With cyber threats evolving rapidly and organizations facing increasingly sophisticated attacks, the demand for skilled cybersecurity professionals has never been higher.</p>
+const BlogDisplay = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [error, setError] = useState(null);
 
-    <h2>Why Choose Cybersecurity?</h2>
-    <p>The cybersecurity industry offers numerous advantages for professionals looking to build a rewarding career:</p>
+  // Fetch blogs from API
+  const fetchBlogs = async () => {
+    setLoading(true);
+    setError(null);
     
-    <ul>
-      <li><strong>High Demand:</strong> There's a global shortage of over 3.4 million cybersecurity professionals</li>
-      <li><strong>Competitive Salaries:</strong> Entry-level positions often start at $60,000-$80,000 annually</li>
-      <li><strong>Job Security:</strong> Cybersecurity roles are recession-proof and continuously growing</li>
-      <li><strong>Diverse Opportunities:</strong> Multiple specializations from technical to management roles</li>
-    </ul>
-
-    <h2>Essential Skills for Beginners</h2>
-    <p>To succeed in cybersecurity, you'll need to develop both technical and soft skills:</p>
-
-    <h3>Technical Skills</h3>
-    <ul>
-      <li>Network security fundamentals</li>
-      <li>Operating system knowledge (Windows, Linux, macOS)</li>
-      <li>Understanding of common vulnerabilities and exploits</li>
-      <li>Familiarity with security tools and frameworks</li>
-      <li>Basic scripting and programming skills</li>
-    </ul>
-
-    <h3>Soft Skills</h3>
-    <ul>
-      <li>Problem-solving and analytical thinking</li>
-      <li>Communication skills for reporting and collaboration</li>
-      <li>Attention to detail</li>
-      <li>Continuous learning mindset</li>
-      <li>Ethical decision-making</li>
-    </ul>
-
-    <h2>Getting Started: Your First Steps</h2>
-    <p>Here's a practical roadmap for beginners entering the cybersecurity field:</p>
-
-    <ol>
-      <li><strong>Build Foundation Knowledge:</strong> Start with networking basics, understanding TCP/IP, and learning about common security concepts</li>
-      <li><strong>Hands-on Practice:</strong> Set up virtual labs to practice with security tools and scenarios</li>
-      <li><strong>Pursue Certifications:</strong> Consider entry-level certifications like CompTIA Security+ or (ISC)² Systems Security Certified Practitioner (SSCP)</li>
-      <li><strong>Join Communities:</strong> Participate in cybersecurity forums, attend local meetups, and connect with professionals</li>
-      <li><strong>Stay Updated:</strong> Follow security news, blogs, and threat intelligence sources</li>
-    </ol>
-
-    <h2>Common Career Paths</h2>
-    <p>Cybersecurity offers various specialization areas:</p>
-
-    <ul>
-      <li><strong>Security Analyst:</strong> Monitor and analyze security events</li>
-      <li><strong>Penetration Tester:</strong> Conduct authorized attacks to find vulnerabilities</li>
-      <li><strong>Security Architect:</strong> Design secure systems and infrastructure</li>
-      <li><strong>Incident Response Specialist:</strong> Handle security breaches and attacks</li>
-      <li><strong>Compliance Analyst:</strong> Ensure organizational adherence to security standards</li>
-    </ul>
-
-    <h2>Conclusion</h2>
-    <p>Starting a career in cybersecurity can seem daunting, but with the right approach and dedication, it's an incredibly rewarding field. The key is to start with solid fundamentals, gain practical experience, and never stop learning. Remember, cybersecurity is not just about technology—it's about protecting people, organizations, and society from digital threats.</p>
-
-    <p>Whether you're just starting your journey or looking to transition from another field, the cybersecurity community is welcoming and supportive. Take the first step today, and you'll be amazed at the opportunities that await you in this dynamic and essential field.</p>
-  `;
-
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLikes(isLiked ? likes - 1 : likes + 1);
-  };
-
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: blog.title,
-        text: blog.excerpt,
-        url: window.location.href,
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+    try {
+      const response = await getBlogsApi();
+      
+      if (response.success) {
+        console.log(response.data,"data list")
+        setBlogs(response.data);
+      } else {
+        setError(response.message);
+        message.error(response.message);
+      }
+    } catch (err) {
+      const errorMessage = 'Failed to load blogs. Please try again.';
+      setError(errorMessage);
+      message.error(errorMessage);
+      console.error('Blog fetch error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Related articles (sample data)
-  const relatedArticles = [
-    {
-      id: 2,
-      title: "Top 10 Cybersecurity Certifications for 2025",
-      excerpt: "Discover the most valuable cybersecurity certifications...",
-      imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=300&h=180&fit=crop",
-      readTime: 12
-    },
-    {
-      id: 3,
-      title: "How to Ace Your Cybersecurity Interview",
-      excerpt: "Master the art of cybersecurity interviews...",
-      imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=180&fit=crop",
-      readTime: 10
-    },
-    {
-      id: 10,
-      title: "Penetration Testing Career Path",
-      excerpt: "A comprehensive roadmap for aspiring penetration testers...",
-      imageUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&h=180&fit=crop",
-      readTime: 20
-    }
-  ];
+  // Fetch blogs on component mount
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  // Handle blog selection
+  const handleBlogClick = (blog) => {
+    setSelectedBlog(blog);
+    // You can add navigation logic here, e.g.:
+    // navigate(`/blog/${blog._id}`);
+    console.log('Selected blog:', blog);
+  };
+
+  // Retry function
+  const handleRetry = () => {
+    fetchBlogs();
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <Spin size="large" />
+        <span className="ml-3 text-gray-600">Loading blogs...</span>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <Empty
+          description={
+            <div>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <Button 
+                type="primary" 
+                icon={<ReloadOutlined />}
+                onClick={handleRetry}
+              >
+                Try Again
+              </Button>
+            </div>
+          }
+        />
+      </div>
+    );
+  }
+
+  // Empty state
+  if (!blogs || blogs.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <Empty 
+          description="No blogs found. Create your first blog post!"
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
-            <button
-              onClick={onBack}
-              className="flex items-center text-gray-600 hover:text-teal-600 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Back to Blog
-            </button>
-            
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleLike}
-                className={`flex items-center space-x-1 px-3 py-1 rounded-lg transition-colors ${
-                  isLiked ? 'text-red-600 bg-red-50' : 'text-gray-600 hover:text-red-600 hover:bg-red-50'
-                }`}
-              >
-                <ThumbsUp className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-                <span>{likes}</span>
-              </button>
-              
-              <button
-                onClick={handleBookmark}
-                className={`p-2 rounded-lg transition-colors ${
-                  isBookmarked ? 'text-teal-600 bg-teal-50' : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
-                }`}
-              >
-                <BookmarkPlus className={`w-5 h-5 ${isBookmarked ? 'fill-current' : ''}`} />
-              </button>
-              
-              <button
-                onClick={handleShare}
-                className="p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          Latest Blog Posts
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Discover insights, tutorials, and expert advice on cybersecurity and technology
+        </p>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Image */}
-        <div className="relative mb-8 rounded-xl overflow-hidden">
-          <img
-            src={blog.imageUrl}
-            alt={blog.title}
-            className="w-full h-64 md:h-80 object-cover"
+      {/* Blog Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {blogs.map((blog) => (
+          <BlogCard 
+            key={blog._id} 
+            blog={blog} 
+            onBlogClick={handleBlogClick}
           />
-          <div className="absolute top-6 left-6">
-            <span className="bg-teal-600 text-white px-4 py-2 rounded-full font-semibold">
-              {blog.category}
-            </span>
-          </div>
-        </div>
-
-        {/* Article Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            {blog.title}
-          </h1>
-          
-          {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
-            <div className="flex items-center">
-              <User className="w-5 h-5 mr-2" />
-              <span className="font-medium">{blog.author}</span>
-            </div>
-            <div className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
-              <span>{blog.publishDate}</span>
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              <span>{blog.readTime} min read</span>
-            </div>
-            <div className="flex items-center">
-              <Eye className="w-5 h-5 mr-2" />
-              <span>2.4k views</span>
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-8">
-            {blog.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm"
-              >
-                <Tag className="w-3 h-3 mr-1" />
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Article Content */}
-        <div className="prose prose-lg max-w-none mb-12">
-          <div 
-            className="text-gray-800 leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: blogContent }}
-          />
-        </div>
-
-        {/* Author Bio */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200 mb-12">
-          <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-teal-600" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{blog.author}</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Expert cybersecurity professional with over 10 years of experience in helping organizations 
-                build robust security programs. Passionate about education and mentoring the next generation 
-                of cybersecurity professionals.
-              </p>
-              <div className="mt-4">
-                <button className="text-teal-600 hover:text-teal-700 font-semibold">
-                  Follow Author
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Related Articles */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {relatedArticles.map((article) => (
-              <div
-                key={article.id}
-                className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-              >
-                <img
-                  src={article.imageUrl}
-                  alt={article.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="font-bold text-gray-900 mb-2 line-clamp-2">
-                    {article.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {article.excerpt}
-                  </p>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="w-4 h-4 mr-1" />
-                    <span>{article.readTime} min read</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Comments Section */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Comments</h2>
-            <div className="flex items-center text-gray-600">
-              <MessageCircle className="w-5 h-5 mr-2" />
-              <span>12 comments</span>
-            </div>
-          </div>
-          
-          {/* Add Comment */}
-          <div className="mb-8">
-            <textarea
-              placeholder="Share your thoughts..."
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
-              rows={3}
-            />
-            <div className="mt-3 flex justify-end">
-              <button className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors">
-                Post Comment
-              </button>
-            </div>
-          </div>
-
-          {/* Sample Comments */}
-          <div className="space-y-6">
-            {[
-              {
-                name: "Sarah Johnson",
-                time: "2 hours ago",
-                comment: "This is exactly what I needed to get started in cybersecurity! The roadmap is very clear and actionable. Thank you for sharing this comprehensive guide."
-              },
-              {
-                name: "Mike Chen",
-                time: "5 hours ago",
-                comment: "Great article! I've been considering a career change to cybersecurity and this gives me a lot of confidence that it's the right move."
-              }
-            ].map((comment, index) => (
-              <div key={index} className="border-b border-gray-100 pb-6 last:border-b-0">
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-gray-600" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="font-semibold text-gray-900">{comment.name}</span>
-                      <span className="text-gray-500 text-sm">{comment.time}</span>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed">{comment.comment}</p>
-                    <div className="mt-3 flex items-center space-x-4 text-sm">
-                      <button className="text-gray-500 hover:text-teal-600 flex items-center">
-                        <ThumbsUp className="w-4 h-4 mr-1" />
-                        Like
-                      </button>
-                      <button className="text-gray-500 hover:text-teal-600">
-                        Reply
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
+
+      {/* Load More Button (if needed for pagination) */}
+      {blogs.length > 0 && (
+        <div className="text-center mt-12">
+          <Button size="large" type="default">
+            Load More Posts
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
@@ -2232,6 +2064,97 @@ const BlogPage = () => {
   },
   ]
 
+   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Fetch blogs from API
+  const fetchBlogs = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await getBlogsApi();
+      
+      if (response.success) {
+        console.log(response.data,"data list")
+        setBlogs(response.data);
+      } else {
+        setError(response.message);
+        message.error(response.message);
+      }
+    } catch (err) {
+      const errorMessage = 'Failed to load blogs. Please try again.';
+      setError(errorMessage);
+      message.error(errorMessage);
+      console.error('Blog fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch blogs on component mount
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  // Handle blog selection
+  const handleBlogClick = (blog) => {
+    setSelectedBlog(blog);
+    // You can add navigation logic here, e.g.:
+    // navigate(`/blog/${blog._id}`);
+    console.log('Selected blog:', blog);
+  };
+
+  // Retry function
+  const handleRetry = () => {
+    fetchBlogs();
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <Spin size="large" />
+        <span className="ml-3 text-gray-600">Loading blogs...</span>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <Empty
+          description={
+            <div>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <Button 
+                type="primary" 
+                icon={<ReloadOutlined />}
+                onClick={handleRetry}
+              >
+                Try Again
+              </Button>
+            </div>
+          }
+        />
+      </div>
+    );
+  }
+
+  // Empty state
+  if (!blogs || blogs.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <Empty 
+          description="No blogs found. Create your first blog post!"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="pt-16">
       {/* Hero Section */}
@@ -2271,7 +2194,7 @@ const BlogPage = () => {
 
           {/* Blog Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((blog) => (
+            {blogs?.map((blog) => (
               <BlogCard key={blog.id} blog={blog} />
             ))}
           </div>
