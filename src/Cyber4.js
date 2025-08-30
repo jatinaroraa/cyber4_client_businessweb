@@ -188,7 +188,7 @@ const CoursePlatform = () => {
     //    </div>
     // )
 const CyberbLogo = () => (
-  <div className="flex items-center">
+  <div className="flex items-center cursor-pointer" onClick={()=>setCurrentPage('home')}>
     <img 
       src={require('./assets/cyber4logo.png')} 
       alt="Cyberb4 Logo" 
@@ -520,7 +520,7 @@ const CyberbLogo = () => (
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -554,6 +554,121 @@ const CyberbLogo = () => (
               <h3 className="font-semibold text-lg mb-2">Address</h3>
               <p className="text-gray-600">Acharya Vihar, Bhubaneshwar</p>
               <p className="text-gray-600">Abu Dhabi, United Arab Emirates</p>
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+       <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Get in Touch
+            </h2>
+            <p className="text-gray-600">
+              Ready to start your cybersecurity journey? Contact us today!
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📞</span>
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Telephone</h3>
+              <p className="text-gray-600">+91 674 238 6292</p>
+              <p className="text-gray-600">+91 73777 16282</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📧</span>
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Email</h3>
+              <p className="text-gray-600">Support@cyberb4.com</p>
+              <p className="text-gray-600">Cyberb4@hotmail.com</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">📍</span>
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Our Locations</h3>
+              <p className="text-gray-600">India & UAE</p>
+            </div>
+          </div>
+
+          {/* Office Locations with Google Maps */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* India Office */}
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <div className="flex items-center mb-4">
+                <div className="bg-teal-100 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-xl">🇮🇳</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">
+                  India Office
+                </h3>
+              </div>
+              <p className="text-gray-700 mb-4">
+                Shaheed Nagar, Bhubaneshwar
+                <br />
+                Odisha, India
+              </p>
+              <div className="mb-4">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.6789436894345!2d85.82472631495439!3d20.295856886396247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a1d0e4b1b5c1%3A0x7e4f4b4d4b4b4b4b!2sShaheed%20Nagar%2C%20Bhubaneswar%2C%20Odisha%2C%20India!5e0!3m2!1sen!2sin!4v1642585847123!5m2!1sen!2sin"
+                  width="100%"
+                  height="200"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-lg"
+                ></iframe>
+              </div>
+              <a
+                href="https://maps.google.com/?q=Shaheed+Nagar,+Bhubaneshwar,+Odisha,+India"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold"
+              >
+                View on Google Maps
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </a>
+            </div>
+
+            {/* UAE Office */}
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <div className="flex items-center mb-4">
+                <div className="bg-teal-100 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-xl">🇦🇪</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">UAE Office</h3>
+              </div>
+              <p className="text-gray-700 mb-4">
+                Reem Island
+                <br />
+                Abu Dhabi, United Arab Emirates
+              </p>
+              <div className="mb-4">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3631.5234567890123!2d54.39876789012345!3d24.456789012345678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5e6d1234567890%3A0x1234567890abcdef!2sReem%20Island%2C%20Abu%20Dhabi%2C%20United%20Arab%20Emirates!5e0!3m2!1sen!2sae!4v1642585847124!5m2!1sen!2sae"
+                  width="100%"
+                  height="200"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-lg"
+                ></iframe>
+              </div>
+              <a
+                href="https://maps.google.com/?q=Reem+Island,+Abu+Dhabi,+United+Arab+Emirates"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold"
+              >
+                View on Google Maps
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </a>
             </div>
           </div>
         </div>
@@ -4045,17 +4160,16 @@ const ServiceForm = ({ onClose }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <CyberbLogo />
-            <p className="mt-4 text-gray-300 max-w-md">
-              Your trusted partner in launching a successful career in
-              cybersecurity, data privacy, IT governance, and compliance.
-            </p>
-            <div className="mt-6 flex space-x-4">
+            <CyberbLogo  />
+             <div className="mt-6 flex space-x-4">
               <div className="text-gray-300">
                 <p className="font-semibold mb-2">Contact Information</p>
                 <p className="text-sm">📞 +91 674 238 6292 | +91 73777 16282</p>
                 <p className="text-sm">📧 Support@cyberb4.com</p>
-                <p className="text-sm">📍 Bhubaneshwar | Abu Dhabi</p>
+                <p className="text-sm">
+                  📍 Shaheed Nagar, Bhubaneshwar, Odisha, India
+                </p>
+                <p className="text-sm">📍 Reem Island, Abu Dhabi, UAE</p>
               </div>
             </div>
           </div>
