@@ -6,7 +6,6 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { toast } from "react-toastify";
-import { loginUserApi } from "../services/user";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -22,29 +21,15 @@ export default function Login() {
     if (user) navigate("/dashboard");
   }, [user]);
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    let res = await loginUserApi(values)
-    if(res?.token){
-        login(res?.token,res?.user);
-        toast.success("login sucessfull!");
-        navigate("/");
-        return 
+    if (values.email === "admin@test.com" && values.password === "12345678") {
+      login("fake-jwt-token"); // Store token
+      toast.success("login sucessfull!");
+      navigate("/dashboard"); // Redirect to Dashboard
+    } else {
+      toast.error("invalid credentials");
     }
-    console.log(res,"res")
-    if(res?.error ||res===null){
-        toast.error(res?.message||'try again!')
-        return 
-    }
-
-
-    // if (values.email === "admin@test.com" && values.password === "123456") {
-    //   login("fake-jwt-token"); // Store token
-    //   toast.success("login sucessfull!");
-    //   navigate("/dashboard"); // Redirect to Dashboard
-    // } else {
-    //   toast.error("invalid credentials");
-    // }
   };
 
   const styles = {
