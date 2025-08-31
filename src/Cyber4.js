@@ -230,6 +230,7 @@ const CyberbLogo = () => (
               <button
                 key={item.id}
                 onClick={() => {
+                  if(item.id==='blog') return navigate('/blog')
                   setCurrentPage(item.id);
                   setCurrentServicePage("main");
                 }}
@@ -1604,6 +1605,9 @@ const BlogCard = ({ blog, onBlogClick }) => {
       year: 'numeric' 
     });
   };
+   const handleReadMore = () => {
+    navigate(`/blog/${blog._id || blog.id}`);
+  };
 
   const readTime = calculateReadTime(content);
   const publishDate = formatDate(createdAt);
@@ -1683,6 +1687,7 @@ const BlogCard = ({ blog, onBlogClick }) => {
 
         {/* Read More Button */}
         <Button 
+        onClick={()=>handleReadMore()}
           type="link" 
           className="p-0 h-auto font-semibold flex items-center justify-start hover:text-blue-600 transition-colors mt-auto"
           icon={<EyeOutlined />}

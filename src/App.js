@@ -8,6 +8,8 @@ import Dashboard from './Dashboard/Dashboard';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
+import BlogDetailPage from './Dashboard/BlogDetailPage';
+import BlogPage from './pages/blog/BlogPage';
 
 export default function App() {
   return (
@@ -17,7 +19,9 @@ export default function App() {
           <Route path="/" element={<CoursePlatform />} />
           <Route path="/checkats" element={<ATSScoreChecker />} />
           <Route path="/login" element={<Login />} />
-          
+          <Route path="/blog" element={<BlogPage />} />
+
+          <Route path="/blog/:id" element={<BlogDetailPage />} />
           {/* Dashboard route with nested routes */}
           <Route
             path="/dashboard"
