@@ -31,6 +31,8 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import { getBlogsApi } from "./services/blog";
+import { baseUrl } from "./services/config";
+import { toast } from "react-toastify";
 
 const CoursePlatform = () => {
   const [currentPage, setCurrentPage] = useState("home");
@@ -3249,6 +3251,309 @@ const PricingPage = () => (
   //   </div>
   // );
 
+// const ConsultationForm = ({ onClose }) => {
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     contactNumber: '',
+//     cvFile: null,
+//     comments: '',
+//     agreeToTerms: false
+//   });
+
+//   const [formErrors, setFormErrors] = useState({});
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+
+//   const handleInputChange = (e) => {
+//     const { name, value, type, checked, files } = e.target;
+    
+//     let newValue;
+//     if (type === 'checkbox') {
+//       newValue = checked;
+//     } else if (type === 'file') {
+//       newValue = files[0] || null;
+//     } else {
+//       newValue = value;
+//     }
+
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: newValue
+//     }));
+
+//     // Real-time validation
+//     const fieldError = validateField(name, newValue);
+//     setFormErrors(prev => ({
+//       ...prev,
+//       [name]: fieldError
+//     }));
+//   };
+
+//   const validateField = (name, value) => {
+//     switch (name) {
+//       case 'name':
+//         if (!value.trim()) return 'Full name is required';
+//         if (value.trim().length < 2) return 'Name must be at least 2 characters long';
+//         if (!/^[a-zA-Z\s]+$/.test(value.trim())) return 'Name can only contain letters and spaces';
+//         return '';
+      
+//       case 'email':
+//         if (!value.trim()) return 'Email is required';
+//         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Please enter a valid email address';
+//         return '';
+      
+//       case 'contactNumber':
+//         if (!value.trim()) return 'Contact number is required';
+//         const cleanNumber = value.replace(/[\s-()]/g, '');
+//         if (!/^\+?[\d]{10,15}$/.test(cleanNumber)) return 'Please enter a valid contact number (10-15 digits)';
+//         return '';
+      
+//       case 'cvFile':
+//         if (!value) return 'Please upload your CV/Resume';
+//         const maxSize = 5 * 1024 * 1024; // 5MB
+//         const allowedTypes = ['.pdf', '.doc', '.docx'];
+//         const fileExtension = '.' + value.name.split('.').pop().toLowerCase();
+        
+//         if (value.size > maxSize) return 'File size must be less than 5MB';
+//         if (!allowedTypes.includes(fileExtension)) return 'Only PDF, DOC, and DOCX files are allowed';
+//         return '';
+      
+//       case 'comments':
+//         if (value.length > 500) return 'Comments must be less than 500 characters';
+//         return '';
+      
+//       case 'agreeToTerms':
+//         if (!value) return 'You must agree to the terms and conditions';
+//         return '';
+      
+//       default:
+//         return '';
+//     }
+//   };
+
+//   const validateForm = () => {
+//     const errors = {};
+    
+//     Object.keys(formData).forEach(field => {
+//       const error = validateField(field, formData[field]);
+//       if (error) errors[field] = error;
+//     });
+
+//     return errors;
+//   };
+
+//   const isFormValid = () => {
+//     return formData.name.trim() && 
+//            formData.email.trim() && 
+//            formData.contactNumber.trim() && 
+//            formData.cvFile && 
+//            formData.agreeToTerms &&
+//            Object.keys(formErrors).length === 0;
+//   };
+
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     const errors = validateForm();
+//     if (Object.keys(errors).length > 0) {
+//       setFormErrors(errors);
+//       return;
+//     }
+
+//     setIsSubmitting(true);
+    
+//     try {
+//       // Simulate form submission
+//       await new Promise(resolve => setTimeout(resolve, 2000));
+      
+//       // Here you would typically send the form data to your backend
+//       console.log('Form submitted:', formData);
+      
+//       // Show success message or redirect
+//       alert('Consultation booked successfully! We will contact you soon.');
+//       if (onClose) onClose();
+//     } catch (error) {
+//       console.error('Error submitting form:', error);
+//       alert('There was an error booking your consultation. Please try again.');
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   return (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//       <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+//         <div className="p-6">
+//           <div className="flex justify-between items-center mb-4">
+//             <h2 className="text-2xl font-bold">Schedule Free Consultation</h2>
+//             <button
+//               onClick={onClose}
+//               className="text-gray-400 hover:text-gray-600"
+//               type="button"
+//             >
+//               <X className="w-6 h-6" />
+//             </button>
+//           </div>
+
+//           <div onSubmit={handleFormSubmit}>
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Full Name *
+//               </label>
+//               <input
+//                 type="text"
+//                 name="name"
+//                 value={formData.name}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.name ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your full name"
+//                 autoComplete="name"
+//               />
+//               {formErrors.name && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Email Address *
+//               </label>
+//               <input
+//                 type="email"
+//                 name="email"
+//                 value={formData.email}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.email ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your email"
+//                 autoComplete="email"
+//               />
+//               {formErrors.email && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Contact Number *
+//               </label>
+//               <input
+//                 type="tel"
+//                 name="contactNumber"
+//                 value={formData.contactNumber}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.contactNumber
+//                     ? "border-red-500"
+//                     : "border-gray-300"
+//                 }`}
+//                 placeholder="+91xxxxxxxxxx"
+//                 autoComplete="tel"
+//               />
+//               {formErrors.contactNumber && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.contactNumber}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Upload CV/Resume *
+//               </label>
+//               <input
+//                 type="file"
+//                 name="cvFile"
+//                 onChange={handleInputChange}
+//                 accept=".pdf,.doc,.docx"
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.cvFile ? "border-red-500" : "border-gray-300"
+//                 }`}
+//               />
+//               {formData.cvFile ? (
+//                 <p className="text-green-600 text-sm mt-1 flex items-center">
+//                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+//                   </svg>
+//                   Successfully uploaded: {formData.cvFile.name}
+//                 </p>
+//               ) : (
+//                 <p className="text-sm text-gray-500 mt-1">
+//                   Accepted formats: PDF, DOC, DOCX (Max 5MB)
+//                 </p>
+//               )}
+//               {formErrors.cvFile && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.cvFile}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Comments (Optional)
+//               </label>
+//               <textarea
+//                 name="comments"
+//                 value={formData.comments}
+//                 onChange={handleInputChange}
+//                 rows={3}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none ${
+//                   formErrors.comments ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Any specific questions or areas you'd like to discuss..."
+//                 maxLength={500}
+//               />
+//               <p className="text-sm text-gray-500 mt-1">
+//                 {formData.comments.length}/500 characters
+//               </p>
+//               {formErrors.comments && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.comments}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="mb-6">
+//               <label className="flex items-start">
+//                 <input
+//                   type="checkbox"
+//                   name="agreeToTerms"
+//                   checked={formData.agreeToTerms}
+//                   onChange={handleInputChange}
+//                   className="mt-1 mr-2 w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+//                 />
+//                 <span className="text-sm text-gray-700">
+//                   I agree to the terms and conditions and privacy policy *
+//                 </span>
+//               </label>
+//               {formErrors.agreeToTerms && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.agreeToTerms}
+//                 </p>
+//               )}
+//             </div>
+
+//             <button
+//               type="button"
+//               onClick={handleFormSubmit}
+//               disabled={isSubmitting || !formData.agreeToTerms}
+//               className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
+//                 formData.agreeToTerms && !isSubmitting
+//                   ? 'bg-teal-600 text-white hover:bg-teal-700 hover:shadow-md cursor-pointer'
+//                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+//               }`}
+//             >
+//               {isSubmitting ? "Booking..." : "Book Free Consultation"}
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
 const ConsultationForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -3261,6 +3566,7 @@ const ConsultationForm = ({ onClose }) => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
 
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -3278,6 +3584,9 @@ const ConsultationForm = ({ onClose }) => {
       ...prev,
       [name]: newValue
     }));
+
+    // Clear submit status when user makes changes
+    setSubmitStatus(null);
 
     // Real-time validation
     const fieldError = validateField(name, newValue);
@@ -3340,15 +3649,6 @@ const ConsultationForm = ({ onClose }) => {
     return errors;
   };
 
-  const isFormValid = () => {
-    return formData.name.trim() && 
-           formData.email.trim() && 
-           formData.contactNumber.trim() && 
-           formData.cvFile && 
-           formData.agreeToTerms &&
-           Object.keys(formErrors).length === 0;
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
@@ -3359,20 +3659,40 @@ const ConsultationForm = ({ onClose }) => {
     }
 
     setIsSubmitting(true);
+    setSubmitStatus(null);
     
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create FormData for file upload
+      const submitFormData = new FormData();
+      submitFormData.append('name', formData.name.trim());
+      submitFormData.append('email', formData.email.trim());
+      submitFormData.append('contactNumber', formData.contactNumber.trim());
+      submitFormData.append('resume', formData.cvFile); // Backend expects 'resume' field name
+      submitFormData.append('message', `Contact Number: ${formData.contactNumber}\n\nComments: ${formData.comments}`);
+
+      // Make API call to your backend
+      const response = await fetch(`${baseUrl}/email/send-resume`, {
+        method: 'POST',
+        body: submitFormData
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitStatus('success');
+        toast.success('For submitted successfully')
+        // Auto-close modal after 2 seconds on success
+        setTimeout(() => {
+          if (onClose) onClose();
+        }, 2000);
+      } else {
+         toast.error('Something went wrong!')
+        throw new Error(result.error || 'Failed to submit consultation request');
+      }
       
-      // Here you would typically send the form data to your backend
-      console.log('Form submitted:', formData);
-      
-      // Show success message or redirect
-      alert('Consultation booked successfully! We will contact you soon.');
-      if (onClose) onClose();
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error booking your consultation. Please try again.');
+      console.error('Error submitting consultation form:', error);
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -3393,7 +3713,30 @@ const ConsultationForm = ({ onClose }) => {
             </button>
           </div>
 
-          <div onSubmit={handleFormSubmit}>
+          {/* Success/Error Messages */}
+          {submitStatus === 'success' && (
+            <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Consultation booked successfully! We will contact you soon.</span>
+              </div>
+            </div>
+          )}
+
+          {submitStatus === 'error' && (
+            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>There was an error booking your consultation. Please try again.</span>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleFormSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Full Name *
@@ -3408,6 +3751,7 @@ const ConsultationForm = ({ onClose }) => {
                 }`}
                 placeholder="Enter your full name"
                 autoComplete="name"
+                disabled={isSubmitting}
               />
               {formErrors.name && (
                 <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
@@ -3428,6 +3772,7 @@ const ConsultationForm = ({ onClose }) => {
                 }`}
                 placeholder="Enter your email"
                 autoComplete="email"
+                disabled={isSubmitting}
               />
               {formErrors.email && (
                 <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
@@ -3450,6 +3795,7 @@ const ConsultationForm = ({ onClose }) => {
                 }`}
                 placeholder="+91xxxxxxxxxx"
                 autoComplete="tel"
+                disabled={isSubmitting}
               />
               {formErrors.contactNumber && (
                 <p className="text-red-500 text-sm mt-1">
@@ -3470,6 +3816,7 @@ const ConsultationForm = ({ onClose }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                   formErrors.cvFile ? "border-red-500" : "border-gray-300"
                 }`}
+                disabled={isSubmitting}
               />
               {formData.cvFile ? (
                 <p className="text-green-600 text-sm mt-1 flex items-center">
@@ -3502,6 +3849,7 @@ const ConsultationForm = ({ onClose }) => {
                 }`}
                 placeholder="Any specific questions or areas you'd like to discuss..."
                 maxLength={500}
+                disabled={isSubmitting}
               />
               <p className="text-sm text-gray-500 mt-1">
                 {formData.comments.length}/500 characters
@@ -3521,6 +3869,7 @@ const ConsultationForm = ({ onClose }) => {
                   checked={formData.agreeToTerms}
                   onChange={handleInputChange}
                   className="mt-1 mr-2 w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                  disabled={isSubmitting}
                 />
                 <span className="text-sm text-gray-700">
                   I agree to the terms and conditions and privacy policy *
@@ -3534,25 +3883,39 @@ const ConsultationForm = ({ onClose }) => {
             </div>
 
             <button
-              type="button"
-              onClick={handleFormSubmit}
-              disabled={isSubmitting || !formData.agreeToTerms}
-              className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
-                formData.agreeToTerms && !isSubmitting
+              type="submit"
+              disabled={isSubmitting || !formData.agreeToTerms || submitStatus === 'success'}
+              className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center ${
+                formData.agreeToTerms && !isSubmitting && submitStatus !== 'success'
                   ? 'bg-teal-600 text-white hover:bg-teal-700 hover:shadow-md cursor-pointer'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              {isSubmitting ? "Booking..." : "Book Free Consultation"}
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Booking...
+                </>
+              ) : submitStatus === 'success' ? (
+                <>
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Booked Successfully!
+                </>
+              ) : (
+                "Book Free Consultation"
+              )}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   );
 };
-
-
 
 
 
@@ -3780,7 +4143,311 @@ const ConsultationForm = ({ onClose }) => {
   //     </div>
   //   </div>
   // );
-const ServiceForm = ({ onClose }) => {
+// const ServiceForm = ({ onClose }) => {
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     contactNumber: '',
+//     cvFile: null,
+//     comments: '',
+//     agreeToTerms: false
+//   });
+
+//   const [formErrors, setFormErrors] = useState({});
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+
+//   const handleInputChange = (e) => {
+//     const { name, value, type, checked, files } = e.target;
+    
+//     let newValue;
+//     if (type === 'checkbox') {
+//       newValue = checked;
+//     } else if (type === 'file') {
+//       newValue = files[0] || null;
+//     } else {
+//       newValue = value;
+//     }
+
+//     setFormData(prev => ({
+//       ...prev,
+//       [name]: newValue
+//     }));
+
+//     // Real-time validation
+//     const fieldError = validateField(name, newValue);
+//     setFormErrors(prev => ({
+//       ...prev,
+//       [name]: fieldError
+//     }));
+//   };
+
+//   const validateField = (name, value) => {
+//     switch (name) {
+//       case 'name':
+//         if (!value.trim()) return 'Full name is required';
+//         if (value.trim().length < 2) return 'Name must be at least 2 characters long';
+//         if (!/^[a-zA-Z\s]+$/.test(value.trim())) return 'Name can only contain letters and spaces';
+//         return '';
+      
+//       case 'email':
+//         if (!value.trim()) return 'Email is required';
+//         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Please enter a valid email address';
+//         return '';
+      
+//       case 'contactNumber':
+//         if (!value.trim()) return 'Contact number is required';
+//         const cleanNumber = value.replace(/[\s-()]/g, '');
+//         if (!/^\+?[\d]{10,15}$/.test(cleanNumber)) return 'Please enter a valid contact number (10-15 digits)';
+//         return '';
+      
+//       case 'cvFile':
+//         if (!value) return 'Please upload your CV/Resume';
+//         const maxSize = 5 * 1024 * 1024; // 5MB
+//         const allowedTypes = ['.pdf', '.doc', '.docx'];
+//         const fileExtension = '.' + value.name.split('.').pop().toLowerCase();
+        
+//         if (value.size > maxSize) return 'File size must be less than 5MB';
+//         if (!allowedTypes.includes(fileExtension)) return 'Only PDF, DOC, and DOCX files are allowed';
+//         return '';
+      
+//       case 'comments':
+//         if (value.length > 500) return 'Comments must be less than 500 characters';
+//         return '';
+      
+//       case 'agreeToTerms':
+//         if (!value) return 'You must agree to the terms and conditions';
+//         return '';
+      
+//       default:
+//         return '';
+//     }
+//   };
+
+//   const validateForm = () => {
+//     const errors = {};
+    
+//     Object.keys(formData).forEach(field => {
+//       const error = validateField(field, formData[field]);
+//       if (error) errors[field] = error;
+//     });
+
+//     return errors;
+//   };
+
+//   const isFormValid = () => {
+//     return formData.name.trim() && 
+//            formData.email.trim() && 
+//            formData.contactNumber.trim() && 
+//            formData.cvFile && 
+//            formData.agreeToTerms &&
+//            Object.keys(formErrors).length === 0;
+//   };
+
+//   const handleFormSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     const errors = validateForm();
+//     if (Object.keys(errors).length > 0) {
+//       setFormErrors(errors);
+//       return;
+//     }
+
+//     setIsSubmitting(true);
+    
+//     try {
+//       // Simulate form submission
+//       await new Promise(resolve => setTimeout(resolve, 2000));
+      
+//       // Here you would typically send the form data to your backend
+//       console.log('Form submitted:', formData);
+      
+//       // Show success message or redirect
+//       alert('Consultation booked successfully! We will contact you soon.');
+//       if (onClose) onClose();
+//     } catch (error) {
+//       console.error('Error submitting form:', error);
+//       alert('There was an error booking your consultation. Please try again.');
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   return (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//       <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+//         <div className="p-6">
+//           <div className="flex justify-between items-center mb-4">
+//             <h2 className="text-2xl font-bold">Book {currentServiceType}</h2>
+//             <button
+//               onClick={onClose}
+//               className="text-gray-400 hover:text-gray-600"
+//               type="button"
+//             >
+//               <X className="w-6 h-6" />
+//             </button>
+//           </div>
+
+//           <div onSubmit={handleFormSubmit}>
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Full Name *
+//               </label>
+//               <input
+//                 type="text"
+//                 name="name"
+//                 value={formData.name}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.name ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your full name"
+//                 autoComplete="name"
+//               />
+//               {formErrors.name && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Email Address *
+//               </label>
+//               <input
+//                 type="email"
+//                 name="email"
+//                 value={formData.email}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.email ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your email"
+//                 autoComplete="email"
+//               />
+//               {formErrors.email && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Contact Number *
+//               </label>
+//               <input
+//                 type="tel"
+//                 name="contactNumber"
+//                 value={formData.contactNumber}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.contactNumber
+//                     ? "border-red-500"
+//                     : "border-gray-300"
+//                 }`}
+//                 placeholder="+91xxxxxxxxxx"
+//                 autoComplete="tel"
+//               />
+//               {formErrors.contactNumber && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.contactNumber}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Upload CV/Resume *
+//               </label>
+//               <input
+//                 type="file"
+//                 name="cvFile"
+//                 onChange={handleInputChange}
+//                 accept=".pdf,.doc,.docx"
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.cvFile ? "border-red-500" : "border-gray-300"
+//                 }`}
+//               />
+//               {formData.cvFile ? (
+//                 <p className="text-green-600 text-sm mt-1 flex items-center">
+//                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+//                   </svg>
+//                   Successfully uploaded: {formData.cvFile.name}
+//                 </p>
+//               ) : (
+//                 <p className="text-sm text-gray-500 mt-1">
+//                   Accepted formats: PDF, DOC, DOCX (Max 5MB)
+//                 </p>
+//               )}
+//               {formErrors.cvFile && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.cvFile}</p>
+//               )}
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Comments (Optional)
+//               </label>
+//               <textarea
+//                 name="comments"
+//                 value={formData.comments}
+//                 onChange={handleInputChange}
+//                 rows={3}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none ${
+//                   formErrors.comments ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Any specific questions or areas you'd like to discuss..."
+//                 maxLength={500}
+//               />
+//               <p className="text-sm text-gray-500 mt-1">
+//                 {formData.comments.length}/500 characters
+//               </p>
+//               {formErrors.comments && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.comments}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="mb-6">
+//               <label className="flex items-start">
+//                 <input
+//                   type="checkbox"
+//                   name="agreeToTerms"
+//                   checked={formData.agreeToTerms}
+//                   onChange={handleInputChange}
+//                   className="mt-1 mr-2 w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+//                 />
+//                 <span className="text-sm text-gray-700">
+//                   I agree to the terms and conditions and privacy policy *
+//                 </span>
+//               </label>
+//               {formErrors.agreeToTerms && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.agreeToTerms}
+//                 </p>
+//               )}
+//             </div>
+
+//             <button
+//               type="button"
+//               onClick={handleFormSubmit}
+//               disabled={isSubmitting || !formData.agreeToTerms}
+//               className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
+//                 formData.agreeToTerms && !isSubmitting
+//                   ? 'bg-teal-600 text-white hover:bg-teal-700 hover:shadow-md cursor-pointer'
+//                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+//               }`}
+//             >
+//               {isSubmitting ? "Booking..." : "Book Free Consultation"}
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+
+const ServiceForm = ({ onClose, currentServiceType }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -3792,6 +4459,7 @@ const ServiceForm = ({ onClose }) => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
 
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -3809,6 +4477,9 @@ const ServiceForm = ({ onClose }) => {
       ...prev,
       [name]: newValue
     }));
+
+    // Clear submit status when user makes changes
+    setSubmitStatus(null);
 
     // Real-time validation
     const fieldError = validateField(name, newValue);
@@ -3871,15 +4542,6 @@ const ServiceForm = ({ onClose }) => {
     return errors;
   };
 
-  const isFormValid = () => {
-    return formData.name.trim() && 
-           formData.email.trim() && 
-           formData.contactNumber.trim() && 
-           formData.cvFile && 
-           formData.agreeToTerms &&
-           Object.keys(formErrors).length === 0;
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
@@ -3890,20 +4552,43 @@ const ServiceForm = ({ onClose }) => {
     }
 
     setIsSubmitting(true);
+    setSubmitStatus(null);
     
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create FormData for file upload
+      const submitFormData = new FormData();
+      submitFormData.append('name', formData.name.trim());
+      submitFormData.append('email', formData.email.trim());
+      submitFormData.append('contactNumber', formData.contactNumber.trim());
+      submitFormData.append('resume', formData.cvFile); // Backend expects 'resume' field name
       
-      // Here you would typically send the form data to your backend
-      console.log('Form submitted:', formData);
+      // Include service type in the message
+      const serviceMessage = `Service Type: ${currentServiceType || 'General Service'}\nContact Number: ${formData.contactNumber}\n\nComments: ${formData.comments}`;
+      submitFormData.append('message', serviceMessage);
+
+      // Make API call to your backend
+      const response = await fetch(`${baseUrl}/email/send-resume`, {
+        method: 'POST',
+        body: submitFormData
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitStatus('success');
+        toast.success('For submitted successfully')
+        // Auto-close modal after 2 seconds on success
+        setTimeout(() => {
+          if (onClose) onClose();
+        }, 2000);
+      } else {
+        toast.error('Something went wrong!')
+        throw new Error(result.error || 'Failed to submit service request');
+      }
       
-      // Show success message or redirect
-      alert('Consultation booked successfully! We will contact you soon.');
-      if (onClose) onClose();
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error booking your consultation. Please try again.');
+      console.error('Error submitting service form:', error);
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -3914,7 +4599,7 @@ const ServiceForm = ({ onClose }) => {
       <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Book {currentServiceType}</h2>
+            <h2 className="text-2xl font-bold">Book {currentServiceType || 'Service'}</h2>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600"
@@ -3924,7 +4609,30 @@ const ServiceForm = ({ onClose }) => {
             </button>
           </div>
 
-          <div onSubmit={handleFormSubmit}>
+          {/* Success/Error Messages */}
+          {submitStatus === 'success' && (
+            <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>{currentServiceType || 'Service'} booked successfully! We will contact you soon.</span>
+              </div>
+            </div>
+          )}
+
+          {submitStatus === 'error' && (
+            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>There was an error booking your {currentServiceType || 'service'}. Please try again.</span>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleFormSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Full Name *
@@ -3939,6 +4647,7 @@ const ServiceForm = ({ onClose }) => {
                 }`}
                 placeholder="Enter your full name"
                 autoComplete="name"
+                disabled={isSubmitting}
               />
               {formErrors.name && (
                 <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
@@ -3959,6 +4668,7 @@ const ServiceForm = ({ onClose }) => {
                 }`}
                 placeholder="Enter your email"
                 autoComplete="email"
+                disabled={isSubmitting}
               />
               {formErrors.email && (
                 <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
@@ -3981,6 +4691,7 @@ const ServiceForm = ({ onClose }) => {
                 }`}
                 placeholder="+91xxxxxxxxxx"
                 autoComplete="tel"
+                disabled={isSubmitting}
               />
               {formErrors.contactNumber && (
                 <p className="text-red-500 text-sm mt-1">
@@ -4001,6 +4712,7 @@ const ServiceForm = ({ onClose }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                   formErrors.cvFile ? "border-red-500" : "border-gray-300"
                 }`}
+                disabled={isSubmitting}
               />
               {formData.cvFile ? (
                 <p className="text-green-600 text-sm mt-1 flex items-center">
@@ -4033,6 +4745,7 @@ const ServiceForm = ({ onClose }) => {
                 }`}
                 placeholder="Any specific questions or areas you'd like to discuss..."
                 maxLength={500}
+                disabled={isSubmitting}
               />
               <p className="text-sm text-gray-500 mt-1">
                 {formData.comments.length}/500 characters
@@ -4052,6 +4765,7 @@ const ServiceForm = ({ onClose }) => {
                   checked={formData.agreeToTerms}
                   onChange={handleInputChange}
                   className="mt-1 mr-2 w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                  disabled={isSubmitting}
                 />
                 <span className="text-sm text-gray-700">
                   I agree to the terms and conditions and privacy policy *
@@ -4065,18 +4779,34 @@ const ServiceForm = ({ onClose }) => {
             </div>
 
             <button
-              type="button"
-              onClick={handleFormSubmit}
-              disabled={isSubmitting || !formData.agreeToTerms}
-              className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 ${
-                formData.agreeToTerms && !isSubmitting
+              type="submit"
+              disabled={isSubmitting || !formData.agreeToTerms || submitStatus === 'success'}
+              className={`w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center ${
+                formData.agreeToTerms && !isSubmitting && submitStatus !== 'success'
                   ? 'bg-teal-600 text-white hover:bg-teal-700 hover:shadow-md cursor-pointer'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              {isSubmitting ? "Booking..." : "Book Free Consultation"}
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Booking...
+                </>
+              ) : submitStatus === 'success' ? (
+                <>
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Booked Successfully!
+                </>
+              ) : (
+                `Book ${currentServiceType || 'Service'}`
+              )}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
