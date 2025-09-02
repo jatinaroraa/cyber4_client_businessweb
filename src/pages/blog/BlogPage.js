@@ -32,6 +32,7 @@ import {
 import { getBlogsApi } from '../../services/blog';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import NavBar from "../../NavBar/NavBar";
 
 
 export default function BlogPage() {
@@ -389,9 +390,11 @@ export default function BlogPage() {
       </div>
     );
   }
+  
 
   return (
     <div className="pt-16">
+      <NavBar/>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-transparent"></div>

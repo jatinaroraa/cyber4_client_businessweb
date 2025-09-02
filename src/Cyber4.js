@@ -35,6 +35,8 @@ import { baseUrl } from "./services/config";
 import { toast } from "react-toastify";
 
 const CoursePlatform = () => {
+const [showExpress,setShowExpress] = useState(false)
+
   const [currentPage, setCurrentPage] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showConsultationForm, setShowConsultationForm] = useState(false);
@@ -115,8 +117,9 @@ const CoursePlatform = () => {
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
-  const handleServiceBooking = (serviceType) => {
+  const handleServiceBooking = (serviceType,express) => {
+    if(express) setShowExpress(true)
+      else setShowExpress(false)
     setCurrentServiceType(serviceType);
     setShowPrivacyDisclaimer(true);
   };
@@ -900,9 +903,13 @@ const CyberbLogo = () => (
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8">
                 <h3 className="font-semibold text-gray-900 mb-2">Disclaimer</h3>
                 <p className="text-gray-700">
-                  This service is a Career Counselling/Guidance service and does
-                  not guarantee job placement. Results may vary based on
-                  individual commitment and market conditions.
+                  Each session lasts 45 minutes via Zoom, and to ensure the best
+                  experience and timely scheduling, the Cyberb4 team will confirm your consultation
+                  only after receiving full payment. Need more time? Simply book extra slots for
+                  extended guidance. Please note that services booked cannot be refunded or
+                  cancelled; however, we’re happy to reschedule your session once if needed. We
+                  appreciate your understanding and look forward to supporting you on your career
+                  journey!
                 </p>
               </div>
 
@@ -1035,6 +1042,18 @@ const CyberbLogo = () => (
                   Additional charges apply for express service.
                 </p>
               </div>
+
+               {/* Disclaimer */}
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8">
+                <h3 className="font-semibold text-gray-900 mb-2">Disclaimer</h3>
+                <p className="text-gray-700">
+                  While Cyberb4 strives to craft resumes that effectively highlight your
+                  skills and experience, we cannot guarantee job offers or interviews. The final resume
+                  content depends on the accuracy and completeness of the information you provide.
+                  It is your responsibility to review and approve the resume before using it. Cyberb4 is
+                  not liable for any decisions made by employers based on your resume.
+                </p>
+              </div>
                 
               {/* Book Service Button */}
               {/* <div className="text-center">
@@ -1059,7 +1078,7 @@ const CyberbLogo = () => (
             
             {/* Book Service Button */}
             <button
-              onClick={() => handleServiceBooking("Resume Development")}
+              onClick={() => handleServiceBooking("Resume Development",true)}
               className="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-colors font-semibold shadow-md hover:shadow-lg"
             >
               📋 Book Resume Development Service
@@ -1403,7 +1422,21 @@ if (currentServicePage === "interview") {
               📅 Book Standard Interview Preparation
             </button>
           </div>
+            {/* Disclaimer */}
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8 mt-10">
+                <h3 className="font-semibold text-gray-900 mb-2">Disclaimer</h3>
+                <p className="text-gray-700">
+                 Cyberb4 provides guidance and coaching to help you improve your
+                interview skills; however, we cannot guarantee job offers or interview calls as
+                outcomes depend on various factors beyond our control. Success also relies on your
+                own preparation and effort. Please note that Cyberb4 does not offer jobs in
+                exchange for money or any form of payment. We commit to delivering quality
+                support, but final interview results are not guaranteed.
+                </p>
+              </div>
+          
         </div>
+        
       </section>
     </div>
   );
@@ -1561,6 +1594,19 @@ if (currentServicePage === "interview") {
                 >
                   Book Mock Interview Service
                 </button>
+              </div>
+
+              {/* Disclaimer */}
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8 mt-10">
+                <h3 className="font-semibold text-gray-900 mb-2">Disclaimer</h3>
+                <p className="text-gray-700">
+                 The mock interview is a simulated practice session designed to help
+                  you improve your interview skills. While we provide constructive feedback and
+                  guidance, successful job placement depends on multiple factors beyond our control,
+                  including employer decisions and market conditions. Cyberb4 does not guarantee
+                  job offers or interview success. This service is intended solely as a preparation tool
+                  to boost your confidence and readiness.
+                </p>
               </div>
             </div>
           </section>
@@ -2679,7 +2725,7 @@ const PricingPage = () => (
             </h1>
             <p className="text-xl max-w-3xl mx-auto text-gray-300">
               Comprehensive career support for cyber security aspirants with
-              transparent pricing
+              affordable pricing
             </p>
           </div>
         </div>
@@ -3561,7 +3607,8 @@ const ConsultationForm = ({ onClose }) => {
     contactNumber: '',
     cvFile: null,
     comments: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    subject:''
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -4454,7 +4501,8 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
     contactNumber: '',
     cvFile: null,
     comments: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    expressService:false
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -4544,7 +4592,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+   
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -4561,11 +4609,11 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
       submitFormData.append('email', formData.email.trim());
       submitFormData.append('contactNumber', formData.contactNumber.trim());
       submitFormData.append('resume', formData.cvFile); // Backend expects 'resume' field name
-      
+      if(showExpress && formData?.expressService)  submitFormData.append('expressService', 'Express service is required');
       // Include service type in the message
       const serviceMessage = `Service Type: ${currentServiceType || 'General Service'}\nContact Number: ${formData.contactNumber}\n\nComments: ${formData.comments}`;
       submitFormData.append('message', serviceMessage);
-
+      submitFormData.append('serviceSlected',currentServiceType)
       // Make API call to your backend
       const response = await fetch(`${baseUrl}/email/send-resume`, {
         method: 'POST',
@@ -4730,6 +4778,25 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
                 <p className="text-red-500 text-sm mt-1">{formErrors.cvFile}</p>
               )}
             </div>
+
+
+            {showExpress && (
+              <div className="mb-4">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="expressService"
+                    checked={formData.expressService}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">
+                    Express Service (2 business days delivery) - Additional
+                    charges apply
+                  </span>
+                </label>
+              </div>
+            )}
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -4942,9 +5009,9 @@ const navigate = useNavigate()
       {currentPage === "blog"  && <BlogPage />}
       {currentPage === "pricing" && <PricingPage />}
 
-      {showConsultationForm && <ConsultationForm onClose={()=>setShowConsultationForm(false)} />}
+      {showConsultationForm && <ConsultationForm onClose={()=>setShowConsultationForm(false)} currentServiceType={currentServiceType} currentServicePage={currentServicePage} />}
       {showPrivacyDisclaimer && <PrivacyDisclaimer />}
-      {showServiceForm && <ServiceForm onClose={()=>setShowServiceForm(false)} />}
+      {showServiceForm && <ServiceForm onClose={()=>setShowServiceForm(false)} currentServiceType={currentServiceType} currentServicePage={currentServicePage} />}
 
       <Footer />
     </div>

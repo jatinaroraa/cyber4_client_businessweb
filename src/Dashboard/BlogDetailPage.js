@@ -6,15 +6,18 @@ import {
   ClockCircleOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getBlogByIdApi } from '../services/blog';
 
-const BlogDetailPage = ({ onBack }) => {
+const BlogDetailPage = () => {
   let { id: blogId } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate()
+  const onBack = ()=>{
+    navigate('/blog')
+  }
   const fetchBlog = async () => {
     if (!blogId) {
       setError('Blog ID not provided');
