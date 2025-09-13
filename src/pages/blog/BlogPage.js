@@ -121,7 +121,7 @@ export default function BlogPage() {
                 color="blue"
                 className="text-xs"
               >
-                {tag}
+         
               </Tag>
             ))}
             {tags.length > 3 && (
@@ -133,7 +133,7 @@ export default function BlogPage() {
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+        {/* <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
           <div className="flex items-center space-x-3">
             <div className="flex items-center">
               <UserOutlined className="mr-1" />
@@ -148,7 +148,7 @@ export default function BlogPage() {
             <ClockCircleOutlined className="mr-1" />
             <span>{readTime} min read</span>
           </div>
-        </div>
+        </div> */}
 
         {/* Read More Button */}
         <Button 

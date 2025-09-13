@@ -9,7 +9,12 @@ export const createBlogApi = async (blogData, thumbnailFile) => {
     
     formData.append('title', blogData.title);
     formData.append('description', blogData.description);
+
     formData.append('content', blogData.content || '');
+    formData.append('keywords', blogData.keywords || '');
+    formData.append('category', blogData.category || '');
+
+
     formData.append('status', blogData.status || 'published');
     
     // Handle tags array - convert to comma-separated string

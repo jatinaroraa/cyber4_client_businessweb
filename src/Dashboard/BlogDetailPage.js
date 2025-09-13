@@ -130,10 +130,10 @@ const BlogDetailPage = () => {
             
             {/* Meta Information */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-gray-600 text-sm mb-8">
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <UserOutlined />
                 <span>{blog.author || 'Admin'}</span>
-              </div>
+              </div> */}
               <div className="flex items-center gap-2">
                 <CalendarOutlined />
                 <span>{publishDate}</span>
@@ -193,23 +193,7 @@ const BlogDetailPage = () => {
           )}
 
           {/* Author Info */}
-          <div className="max-w-3xl mx-auto mt-12 pt-8 border-t border-gray-200">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {(blog.author || 'Admin').charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    {blog.author || 'Admin'}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    Cybersecurity expert dedicated to sharing knowledge and helping others succeed in the field of information security.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+         
         </article>
       </main>
 
