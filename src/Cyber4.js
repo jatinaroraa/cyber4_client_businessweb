@@ -17,7 +17,8 @@ import {
   Calendar,
   User,
   Clock,
-  ArrowLeft, Share2, BookmarkPlus, ThumbsUp, MessageCircle, Eye
+  ArrowLeft, Share2, BookmarkPlus, ThumbsUp, MessageCircle, Eye,
+  UserCheck
 } from "lucide-react";
 import { Card, Avatar, Spin, message, Empty, Button } from 'antd';
 import { 
@@ -3727,7 +3728,7 @@ const ConsultationForm = ({ onClose }) => {
 
       if (response.ok && result.success) {
         setSubmitStatus('success');
-        toast.success('For submitted successfully')
+        toast.success('Details submitted successfully')
         // Auto-close modal after 2 seconds on success
         setTimeout(() => {
           if (onClose) onClose();
@@ -3969,46 +3970,128 @@ const ConsultationForm = ({ onClose }) => {
 
 
   // Privacy Disclaimer Modal
-  const PrivacyDisclaimer = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-md w-full">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Privacy & Data Protection</h2>
-            <button
-              onClick={() => setShowPrivacyDisclaimer(false)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
+  // const PrivacyDisclaimer = () => 
+  //   (
+  //   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  //     <div className="bg-white rounded-lg max-w-md w-full">
+  //       <div className="p-6">
+  //         <div className="flex justify-between items-center mb-4">
+  //           <h2 className="text-xl font-bold">Privacy & Data Protection</h2>
+  //           <button
+  //             onClick={() => setShowPrivacyDisclaimer(false)}
+  //             className="text-gray-400 hover:text-gray-600"
+  //           >
+  //             <X className="w-6 h-6" />
+  //           </button>
+  //         </div>
 
-          <div className="mb-6">
-            <p className="text-gray-700 mb-4">
-              Your privacy is important to us. By proceeding with our service
-              booking, you acknowledge that:
+  //         <div className="mb-6">
+  //           <p className="text-gray-700 mb-4">
+  //            We respect your privacy and protect your personal information. When you share your details and CV
+  //             with us, we use them only to provide the consultation services you requested. We never share, sell, or
+  //             give your information to others without your permission—unless the law requires us to.Your data is
+  //             kept safe and deleted from our systems within 6 weeks after your service is complete. You can also
+  //             contact us anytime to view, update, or delete your information. By submitting your details, you agree
+  //             to this privacy policy and understand how we handle your data.
+  //           </p>
+           
+  //         </div>
+          
+
+  //         <div className="flex gap-3">
+  //           <button
+  //             onClick={() => setShowPrivacyDisclaimer(false)}
+  //             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+  //           >
+  //             Cancel
+  //           </button>
+  //           <button
+  //             onClick={handlePrivacyAccept}
+  //             className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+  //           >
+  //             Accept & Continue
+  //           </button>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+   const PrivacyDisclaimer = () => {
+ 
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl transform transition-all">
+        {/* Header */}
+        <div className="relative p-6 pb-4">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-blue-50 rounded-xl">
+              <Shield className="w-6 h-6 text-blue-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">Privacy & Data Protection</h2>
+          </div>
+          <button
+            onClick={() => setShowPrivacyDisclaimer(false)}
+            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <p className="text-sm text-gray-600">Your data security is our priority</p>
+        </div>
+
+        {/* Content */}
+        <div className="px-6 pb-6">
+          {/* Main text */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 mb-6 border border-blue-100">
+            <p className="text-gray-700 leading-relaxed text-sm">
+             We respect your privacy and protect your personal information. When you share your details and CV
+              with us, we use them only to provide the consultation services you requested. We never share, sell, or
+              give your information to others without your permission—unless the law requires us to.Your data is
+              kept safe and deleted from our systems within 6 weeks after your service is complete. You can also
+              contact us anytime to view, update, or delete your information. By submitting your details, you agree
+              to this privacy policy and understand how we handle your data.
             </p>
-            <ul className="text-sm text-gray-600 space-y-2">
-              <li>
-                • Your personal information will be used solely for service
-                delivery
-              </li>
-              <li>• We follow strict data protection protocols</li>
-              <li>• Your data will not be shared with third parties</li>
-              <li>• You can request data deletion at any time</li>
-            </ul>
           </div>
 
+          {/* Key features */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-100">
+              <Lock className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <span className="text-xs font-medium text-green-800">Secure Storage</span>
+            </div>
+            <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg border border-purple-100">
+              <Eye className="w-4 h-4 text-purple-600 flex-shrink-0" />
+              <span className="text-xs font-medium text-purple-800">No Sharing</span>
+            </div>
+            <div className="flex items-center gap-2 p-3 bg-orange-50 rounded-lg border border-orange-100">
+              <Clock className="w-4 h-4 text-orange-600 flex-shrink-0" />
+              <span className="text-xs font-medium text-orange-800">6 Week Deletion</span>
+            </div>
+            <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-100">
+              <UserCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <span className="text-xs font-medium text-blue-800">Your Control</span>
+            </div>
+          </div>
+
+          {/* Agreement notice */}
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mb-6">
+            <p className="text-sm text-yellow-800">
+              <span className="font-semibold">By continuing,</span> you agree to our privacy policy and data handling practices.
+            </p>
+          </div>
+
+          {/* Action buttons */}
           <div className="flex gap-3">
             <button
               onClick={() => setShowPrivacyDisclaimer(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-300 font-medium transition-all duration-200"
             >
               Cancel
             </button>
             <button
               onClick={handlePrivacyAccept}
-              className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl hover:from-teal-700 hover:to-teal-800 font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Accept & Continue
             </button>
@@ -4017,179 +4100,183 @@ const ConsultationForm = ({ onClose }) => {
       </div>
     </div>
   );
+   }
 
-  // Service Booking Form Modal
-  // const ServiceForm = () => (
-  //   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-  //     <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
-  //       <div className="p-6">
-  //         <div className="flex justify-between items-center mb-4">
-  //           <h2 className="text-2xl font-bold">Book {currentServiceType}</h2>
-  //           <button
-  //             onClick={() => setShowServiceForm(false)}
-  //             className="text-gray-400 hover:text-gray-600"
-  //           >
-  //             <X className="w-6 h-6" />
-  //           </button>
-  //         </div>
 
-  //         <form onSubmit={handleServiceFormSubmit}>
-  //           <div className="mb-4">
-  //             <label className="block text-sm font-medium text-gray-700 mb-2">
-  //               Full Name *
-  //             </label>
-  //             <input
-  //               type="text"
-  //               name="name"
-  //               value={formData.name}
-  //               onChange={handleInputChange}
-  //               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-  //                 formErrors.name ? "border-red-500" : "border-gray-300"
-  //               }`}
-  //               placeholder="Enter your full name"
-  //             />
-  //             {formErrors.name && (
-  //               <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
-  //             )}
-  //           </div>
 
-  //           <div className="mb-4">
-  //             <label className="block text-sm font-medium text-gray-700 mb-2">
-  //               Email Address *
-  //             </label>
-  //             <input
-  //               type="email"
-  //               name="email"
-  //               value={formData.email}
-  //               onChange={handleInputChange}
-  //               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-  //                 formErrors.email ? "border-red-500" : "border-gray-300"
-  //               }`}
-  //               placeholder="Enter your email"
-  //             />
-  //             {formErrors.email && (
-  //               <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
-  //             )}
-  //           </div>
 
-  //           <div className="mb-4">
-  //             <label className="block text-sm font-medium text-gray-700 mb-2">
-  //               Contact Number *
-  //             </label>
-  //             <input
-  //               type="tel"
-  //               name="contactNumber"
-  //               value={formData.contactNumber}
-  //               onChange={handleInputChange}
-  //               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-  //                 formErrors.contactNumber
-  //                   ? "border-red-500"
-  //                   : "border-gray-300"
-  //               }`}
-  //               placeholder="+91xxxxxxxxxx"
-  //             />
-  //             {formErrors.contactNumber && (
-  //               <p className="text-red-500 text-sm mt-1">
-  //                 {formErrors.contactNumber}
-  //               </p>
-  //             )}
-  //           </div>
+//   Service Booking Form Modal
+//   const ServiceForm = () => (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//       <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+//         <div className="p-6">
+//           <div className="flex justify-between items-center mb-4">
+//             <h2 className="text-2xl font-bold">Book {currentServiceType}</h2>
+//             <button
+//               onClick={() => setShowServiceForm(false)}
+//               className="text-gray-400 hover:text-gray-600"
+//             >
+//               <X className="w-6 h-6" />
+//             </button>
+//           </div>
 
-  //           <div className="mb-4">
-  //             <label className="block text-sm font-medium text-gray-700 mb-2">
-  //               Upload CV/Resume *
-  //             </label>
-  //             <input
-  //               type="file"
-  //               name="cvFile"
-  //               onChange={handleInputChange}
-  //               accept=".pdf,.doc,.docx"
-  //               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-  //                 formErrors.cvFile ? "border-red-500" : "border-gray-300"
-  //               }`}
-  //             />
-  //             <p className="text-sm text-gray-500 mt-1">
-  //               Accepted formats: PDF, DOC, DOCX (Max 5MB)
-  //             </p>
-  //             {formErrors.cvFile && (
-  //               <p className="text-red-500 text-sm mt-1">{formErrors.cvFile}</p>
-  //             )}
-  //           </div>
+//           <form onSubmit={handleServiceFormSubmit}>
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Full Name *
+//               </label>
+//               <input
+//                 type="text"
+//                 name="name"
+//                 value={formData.name}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.name ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your full name"
+//               />
+//               {formErrors.name && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+//               )}
+//             </div>
 
-  //           {currentServiceType === "Resume Development" && (
-  //             <div className="mb-4">
-  //               <label className="flex items-center">
-  //                 <input
-  //                   type="checkbox"
-  //                   name="expressService"
-  //                   checked={formData.expressService}
-  //                   onChange={handleInputChange}
-  //                   className="mr-2"
-  //                 />
-  //                 <span className="text-sm text-gray-700">
-  //                   Express Service (2 business days delivery) - Additional
-  //                   charges apply
-  //                 </span>
-  //               </label>
-  //             </div>
-  //           )}
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Email Address *
+//               </label>
+//               <input
+//                 type="email"
+//                 name="email"
+//                 value={formData.email}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.email ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Enter your email"
+//               />
+//               {formErrors.email && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+//               )}
+//             </div>
 
-  //           <div className="mb-4">
-  //             <label className="block text-sm font-medium text-gray-700 mb-2">
-  //               Comments (Optional)
-  //             </label>
-  //             <textarea
-  //               name="comments"
-  //               value={formData.comments}
-  //               onChange={handleInputChange}
-  //               rows={3}
-  //               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-  //                 formErrors.comments ? "border-red-500" : "border-gray-300"
-  //               }`}
-  //               placeholder="Any specific requirements or questions..."
-  //             />
-  //             <p className="text-sm text-gray-500 mt-1">
-  //               {formData.comments.length}/500 characters
-  //             </p>
-  //             {formErrors.comments && (
-  //               <p className="text-red-500 text-sm mt-1">
-  //                 {formErrors.comments}
-  //               </p>
-  //             )}
-  //           </div>
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Contact Number *
+//               </label>
+//               <input
+//                 type="tel"
+//                 name="contactNumber"
+//                 value={formData.contactNumber}
+//                 onChange={handleInputChange}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.contactNumber
+//                     ? "border-red-500"
+//                     : "border-gray-300"
+//                 }`}
+//                 placeholder="+91xxxxxxxxxx"
+//               />
+//               {formErrors.contactNumber && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.contactNumber}
+//                 </p>
+//               )}
+//             </div>
 
-  //           <div className="mb-6">
-  //             <label className="flex items-start">
-  //               <input
-  //                 type="checkbox"
-  //                 name="agreeToTerms"
-  //                 checked={formData.agreeToTerms}
-  //                 onChange={handleInputChange}
-  //                 className="mt-1 mr-2"
-  //               />
-  //               <span className="text-sm text-gray-700">
-  //                 I agree to the terms and conditions and privacy policy *
-  //               </span>
-  //             </label>
-  //             {formErrors.agreeToTerms && (
-  //               <p className="text-red-500 text-sm mt-1">
-  //                 {formErrors.agreeToTerms}
-  //               </p>
-  //             )}
-  //           </div>
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Upload CV/Resume *
+//               </label>
+//               <input
+//                 type="file"
+//                 name="cvFile"
+//                 onChange={handleInputChange}
+//                 accept=".pdf,.doc,.docx"
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.cvFile ? "border-red-500" : "border-gray-300"
+//                 }`}
+//               />
+//               <p className="text-sm text-gray-500 mt-1">
+//                 Accepted formats: PDF, DOC, DOCX (Max 5MB)
+//               </p>
+//               {formErrors.cvFile && (
+//                 <p className="text-red-500 text-sm mt-1">{formErrors.cvFile}</p>
+//               )}
+//             </div>
 
-  //           <button
-  //             type="submit"
-  //             disabled={isSubmitting}
-  //             className="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
-  //           >
-  //             {isSubmitting ? "Booking..." : `Book ${currentServiceType}`}
-  //           </button>
-  //         </form>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+//             {currentServiceType === "Resume Development" && (
+//               <div className="mb-4">
+//                 <label className="flex items-center">
+//                   <input
+//                     type="checkbox"
+//                     name="expressService"
+//                     checked={formData.expressService}
+//                     onChange={handleInputChange}
+//                     className="mr-2"
+//                   />
+//                   <span className="text-sm text-gray-700">
+//                     Express Service (2 business days delivery) - Additional
+//                     charges apply
+//                   </span>
+//                 </label>
+//               </div>
+//             )}
+
+//             <div className="mb-4">
+//               <label className="block text-sm font-medium text-gray-700 mb-2">
+//                 Comments (Optional)
+//               </label>
+//               <textarea
+//                 name="comments"
+//                 value={formData.comments}
+//                 onChange={handleInputChange}
+//                 rows={3}
+//                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+//                   formErrors.comments ? "border-red-500" : "border-gray-300"
+//                 }`}
+//                 placeholder="Any specific requirements or questions..."
+//               />
+//               <p className="text-sm text-gray-500 mt-1">
+//                 {formData.comments.length}/500 characters
+//               </p>
+//               {formErrors.comments && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.comments}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="mb-6">
+//               <label className="flex items-start">
+//                 <input
+//                   type="checkbox"
+//                   name="agreeToTerms"
+//                   checked={formData.agreeToTerms}
+//                   onChange={handleInputChange}
+//                   className="mt-1 mr-2"
+//                 />
+//                 <span className="text-sm text-gray-700">
+//                   I agree to the terms and conditions and privacy policy *
+//                 </span>
+//               </label>
+//               {formErrors.agreeToTerms && (
+//                 <p className="text-red-500 text-sm mt-1">
+//                   {formErrors.agreeToTerms}
+//                 </p>
+//               )}
+//             </div>
+
+//             <button
+//               type="submit"
+//               disabled={isSubmitting}
+//               className="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
+//             >
+//               {isSubmitting ? "Booking..." : `Book ${currentServiceType}`}
+//             </button>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
 // const ServiceForm = ({ onClose }) => {
 //   const [formData, setFormData] = useState({
 //     name: '',
@@ -4624,7 +4711,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
 
       if (response.ok && result.success) {
         setSubmitStatus('success');
-        toast.success('For submitted successfully')
+        toast.success('Details submitted successfully')
         // Auto-close modal after 2 seconds on success
         setTimeout(() => {
           if (onClose) onClose();
@@ -4880,35 +4967,182 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
   );
 };
   // Footer Component
-  const Footer = () => (
+  // const Footer = () => (
+  //   <footer className="bg-gray-900 text-white py-12 border-t border-teal-400">
+  //     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  //       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+  //         <div className="col-span-1 md:col-span-2">
+  //            <img 
+  //               src={require('./assets/cyber4logo.png')} 
+  //               alt="Cyberb4 Logo" 
+  //               style={{ height: '150px', width: '120px',marginTop:'-50px' }}
+  //               className="drop-shadow-md hover:drop-shadow-lg transition-all duration-300"
+  //             />
+  //            <div className="mt-6 flex space-x-4">
+  //             <div className="text-gray-300">
+  //               <p className="font-semibold mb-2">Contact Information</p>
+  //               <p className="text-sm">📞 +91 674 238 6292 | +91 73777 16282</p>
+  //               <p className="text-sm">📧 Support@cyberb4.com</p>
+  //               <p className="text-sm">
+  //                 📍 Shaheed Nagar, Bhubaneshwar, Odisha, India
+  //               </p>
+  //               <p className="text-sm">📍 Reem Island, Abu Dhabi, UAE</p>
+  //             </div>
+  //           </div>
+  //         </div>
+           
+  //         <div>
+  //           <h3 className="text-lg font-semibold mb-4">Services</h3>
+  //           <ul className="space-y-2 text-gray-300">
+  //             <li>
+  //               <button
+  //                 onClick={() => {
+  //                   setCurrentPage("services");
+  //                   setCurrentServicePage("career");
+  //                 }}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Career Counselling
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => {
+  //                   setCurrentPage("services");
+  //                   setCurrentServicePage("resume");
+  //                 }}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Resume Development
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => {
+  //                   setCurrentPage("services");
+  //                   setCurrentServicePage("interview");
+  //                 }}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Interview Preparation
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => {
+  //                   setCurrentPage("services");
+  //                   setCurrentServicePage("mock");
+  //                 }}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Mock Interview
+  //               </button>
+  //             </li>
+  //           </ul>
+  //         </div>
+
+  //         <div>
+  //           <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+  //           <ul className="space-y-2 text-gray-300">
+  //             <li>
+  //               <button
+  //                 onClick={() => setCurrentPage("home")}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Home
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => setCurrentPage("services")}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Services
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => setCurrentPage("blog")}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Blog
+  //               </button>
+  //             </li>
+  //             <li>
+  //               <button
+  //                 onClick={() => setCurrentPage("pricing")}
+  //                 className="hover:text-teal-400"
+  //               >
+  //                 Pricing
+  //               </button>
+  //             </li>
+  //           </ul>
+  //         </div>
+  //       </div>
+
+  //       <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
+  //         <p>
+  //           &copy; 2025 Cyberb4. All rights reserved. | Privacy Policy | Terms
+  //           of Service
+  //         </p>
+  //       </div>
+  //     </div>
+  //   </footer>
+  // );
+
+ const Footer=()=> {
+ 
+
+  return (
     <footer className="bg-gray-900 text-white py-12 border-t border-teal-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <CyberbLogo  />
-             <div className="mt-6 flex space-x-4">
-              <div className="text-gray-300">
-                <p className="font-semibold mb-2">Contact Information</p>
-                <p className="text-sm">📞 +91 674 238 6292 | +91 73777 16282</p>
-                <p className="text-sm">📧 Support@cyberb4.com</p>
-                <p className="text-sm">
-                  📍 Shaheed Nagar, Bhubaneshwar, Odisha, India
+          {/* Logo Column */}
+          <div className="col-span-1">
+            <img 
+              src={require('./assets/cyber4logo.png')} 
+              alt="Cyberb4 Logo" 
+              style={{ height: '150px', width: '120px', marginTop: '-50px' }}
+              className="drop-shadow-md hover:drop-shadow-lg transition-all duration-300"
+            />
+          </div>
+
+          {/* Contact Information Column */}
+          <div className="col-span-1">
+            <div className="text-gray-300">
+              <p className="font-semibold mb-4 text-lg">Contact Information</p>
+              <div className="space-y-3">
+                <p className="text-sm flex items-start">
+                  <span className="mr-2">📞</span>
+                  <span>+91 674 238 6292<br/>+91 73777 16282</span>
                 </p>
-                <p className="text-sm">📍 Reem Island, Abu Dhabi, UAE</p>
+                <p className="text-sm flex items-center">
+                  <span className="mr-2">📧</span>
+                  Support@cyberb4.com
+                </p>
+                <p className="text-sm flex items-start">
+                  <span className="mr-2">📍</span>
+                  <span>Shaheed Nagar, Bhubaneshwar,<br/>Odisha, India</span>
+                </p>
+                <p className="text-sm flex items-center">
+                  <span className="mr-2">📍</span>
+                  Reem Island, Abu Dhabi, UAE
+                </p>
               </div>
             </div>
           </div>
-
-          <div>
+           
+          {/* Services Column */}
+          <div className="col-span-1">
             <h3 className="text-lg font-semibold mb-4">Services</h3>
-            <ul className="space-y-2 text-gray-300">
+            <ul className="space-y-3 text-gray-300">
               <li>
                 <button
                   onClick={() => {
                     setCurrentPage("services");
                     setCurrentServicePage("career");
                   }}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Career Counselling
                 </button>
@@ -4919,7 +5153,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
                     setCurrentPage("services");
                     setCurrentServicePage("resume");
                   }}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Resume Development
                 </button>
@@ -4930,7 +5164,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
                     setCurrentPage("services");
                     setCurrentServicePage("interview");
                   }}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Interview Preparation
                 </button>
@@ -4941,7 +5175,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
                     setCurrentPage("services");
                     setCurrentServicePage("mock");
                   }}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Mock Interview
                 </button>
@@ -4949,13 +5183,14 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
             </ul>
           </div>
 
-          <div>
+          {/* Quick Links Column */}
+          <div className="col-span-1">
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-gray-300">
+            <ul className="space-y-3 text-gray-300">
               <li>
                 <button
                   onClick={() => setCurrentPage("home")}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Home
                 </button>
@@ -4963,7 +5198,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
               <li>
                 <button
                   onClick={() => setCurrentPage("services")}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Services
                 </button>
@@ -4971,7 +5206,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
               <li>
                 <button
                   onClick={() => setCurrentPage("blog")}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Blog
                 </button>
@@ -4979,7 +5214,7 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
               <li>
                 <button
                   onClick={() => setCurrentPage("pricing")}
-                  className="hover:text-teal-400"
+                  className="hover:text-teal-400 transition-colors duration-200 text-left"
                 >
                   Pricing
                 </button>
@@ -4997,7 +5232,10 @@ const ServiceForm = ({ onClose, currentServiceType }) => {
       </div>
     </footer>
   );
-const [selectedBlog, setSelectedBlog] = useState(null);
+}
+
+
+  const [selectedBlog, setSelectedBlog] = useState(null);
 const navigate = useNavigate()
   // Main App Render
   return (

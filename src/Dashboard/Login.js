@@ -23,7 +23,7 @@ export default function Login() {
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    if (values.email === "admin@test.com" && values.password === "12345678") {
+    if (values.email === "admin@test.com" && values.password === "T9$vX7p!Qk") {
       login("fake-jwt-token"); // Store token
       toast.success("login sucessfull!");
       navigate("/dashboard"); // Redirect to Dashboard

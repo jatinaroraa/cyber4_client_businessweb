@@ -1146,7 +1146,7 @@ const BlogManagement = () => {
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const response = await getBlogsApi();
+      const response = await getBlogsApi({type:'all'});
       if (response.success) {
         setBlogs(response.data || []);
       } else {
